@@ -57,16 +57,8 @@ build() {
 	echo "Updating version in metadata files..."
 	./version-metadata.sh inject $PRODUCT_VERSION
 
-	echo "Building wireguard-go..."
-	pushd wireguard/libwg
-	mkdir -p "../../build/lib/$arch-unknown-linux-gnu"
-	export CGO_CPPFLAGS="${CPPFLAGS}"
-	export CGO_CFLAGS="${CFLAGS}"
-	export CGO_CXXFLAGS="${CXXFLAGS}"
-	export CGO_LDFLAGS="${LDFLAGS}"
-	export GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=readonly -modcacherw"
-	go build -v -o "../../build/lib/$arch-unknown-linux-gnu"/libwg.a -buildmode c-archive
-	popd
+  echo "Building wireguard-go"
+  ./wireguard/build-wireguard-go.sh
 
 	# Clean mod cache for makepkg -C
 	go clean -modcache
